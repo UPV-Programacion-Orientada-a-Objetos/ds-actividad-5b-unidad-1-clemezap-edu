@@ -2,8 +2,6 @@
 #define OPERADORSUMA_H
 
 #include "MatrizBase.h"
-#include "MatrizDinamica.h"
-#include "MatrizEstatica.h"
 #include <iostream>
 
 // Función libre para la sobrecarga del operador +
@@ -21,22 +19,13 @@ MatrizBase<T>* operator+(const MatrizBase<T>& A, const MatrizBase<T>& B) {
         return nullptr;
     }
 
-    if (MatrizDinamica<T>* ptrC = dynamic_cast<MatrizDinamica<T>*>(C)) {
-        for (int i = 0; i < A.getFilas(); ++i) {
-            for (int j = 0; j < A.getColumnas(); ++j) {
-                // Lectura de A y B usando el método polimórfico getElemento()
-                ptrC->_datos[i][j] = A.getElemento(i, j) + B.getElemento(i, j);
-            }
+    // Realizar la suma usando getElemento() para acceder a los datos
+    for (int i = 0; i < A.getFilas(); ++i) {
+        for (int j = 0; j < A.getColumnas(); ++j) {
+            // Lectura de A y B usando el método polimórfico getElemento()
+            // Escritura en C usando setElemento()
+            C->setElemento(i, j, A.getElemento(i, j) + B.getElemento(i, j));
         }
-    } 
-    else if (MatrizEstatica<T, 3, 2>* ptrC = dynamic_cast<MatrizEstatica<T, 3, 2>*>(C)) {
-        for (int i = 0; i < A.getFilas(); ++i) {
-            for (int j = 0; j < A.getColumnas(); ++j) {
-                ptrC->_datos[i][j] = A.getElemento(i, j) + B.getElemento(i, j);
-            }
-        }
-    } else {
-        std::cerr << "Advertencia: El tipo de matriz C es desconocido o no se pudo castear correctamente para la escritura." << std::endl;
     }
 
     return C;

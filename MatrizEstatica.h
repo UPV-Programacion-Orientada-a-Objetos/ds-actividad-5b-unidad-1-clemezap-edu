@@ -68,8 +68,13 @@ class MatrizEstatica : public MatrizBase<T> {
         }
 
         // Método para obtener un elemento para la sobrecarga del operador +
-        T getElemento(int i, int j) const {
+        T getElemento(int i, int j) const override {
             return _datos[i][j];
+        }
+
+        // Método para establecer un elemento para la sobrecarga del operador +
+        void setElemento(int i, int j, T valor) override {
+            _datos[i][j] = valor;
         }
 
 };
