@@ -4,9 +4,9 @@
 #include "MatrizBase.h"
 #include "MatrizDinamica.h"
 #include "MatrizEstatica.h"
+#include <iostream>
 
 // Función libre para la sobrecarga del operador +
-
 template <typename T>
 MatrizBase<T>* operator+(const MatrizBase<T>& A, const MatrizBase<T>& B) {
     // Verificación de Dimensiones
@@ -15,28 +15,31 @@ MatrizBase<T>* operator+(const MatrizBase<T>& A, const MatrizBase<T>& B) {
         return nullptr;
     }
 
-    // Llamado al método virtual sumar de la matriz A.
-
     MatrizBase<T>* C = A.sumar(B);
 
-    // Si A es Dinámica y B es Dinámica
-    if (const MatrizBase<T>* ptrA = dynamic_cast<const MatrizDinamica<T>*>(&A)){
-        if (const MatrizDinamica<T>* ptrB = dynamic_cast<MatrizDinamica<T>*>(&B)){
-            
-            MatrizDinamica<T> * ptrC = dynamic_cast<MatrizDinamica<T>*>(C);
-            if (ptrC) {
-                for (int i = 0; i < A.getFilas(); ++i) {
-                    for (int j = 0; j < A.getColumnas(); ++j) {
-                        ptrC->_datos[i][j] = ptrA->_datos[i][j] + ptrB->_datos[i][j];
-                    }
-                }
+    if (C == nullptr) {
+        return nullptr;
+    }
+
+    if (MatrizDinamica<T>* ptrC = dynamic_cast<MatrizDinamica<T>*>(C)) {
+        for (int i = 0; i < A.getFilas(); ++i) {
+            for (int j = 0; j < A.getColumnas(); ++j) {
+                // Lectura de A y B usando el método polimórfico getElemento()
+                ptrC->_datos[i][j] = A.getElemento(i, j) + B.getElemento(i, j);
             }
         }
+    } 
+    else if (MatrizEstatica<T, 3, 2>* ptrC = dynamic_cast<MatrizEstatica<T, 3, 2>*>(C)) {
+        for (int i = 0; i < A.getFilas(); ++i) {
+            for (int j = 0; j < A.getColumnas(); ++j) {
+                ptrC->_datos[i][j] = A.getElemento(i, j) + B.getElemento(i, j);
+            }
+        }
+    } else {
+        std::cerr << "Advertencia: El tipo de matriz C es desconocido o no se pudo castear correctamente para la escritura." << std::endl;
     }
 
     return C;
-
-
-};
+}
 
 #endif

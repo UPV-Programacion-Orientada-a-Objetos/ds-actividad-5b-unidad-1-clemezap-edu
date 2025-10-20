@@ -29,6 +29,9 @@ class MatrizBase {
         // Lógica para mostrar los contenidos de la matriz.
         virtual void imprimir() const = 0;
 
+        // Método virtual puro necesario para que operator+ pueda acceder a los elementos de A y B
+        virtual T getElemento(int i, int j) const = 0;
+
         // Métodos auxiliares
         int getFilas() const { return _filas; }
         int getColumnas() const { return _columnas; }

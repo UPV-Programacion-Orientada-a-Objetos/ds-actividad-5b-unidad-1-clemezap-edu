@@ -83,14 +83,18 @@ class MatrizDinamica : public MatrizBase<T> {
 
         // Implementación de métodos virtuales
 
+        // Archivo MatrizDinamica.h (fragmento de la implementación de métodos virtuales)
+
         // Carga de la matriz con valores aleatorios.
         void cargarValores() override {
             for (int i = 0; i < this->_filas; ++i){
-                // Generación simple para int/float
-                if constexpr (std::is_integral_v<T>) {
-                    this->_datos[i][j] = static_cast<T>(std::rand() %10);
-                } else {
-                    this->_datos[i][j] = static_cast<T>(std::rand() %500) / 100.0f;
+                for (int j = 0; j < this->_columnas; ++j) {
+                    // Generación simple para int/float
+                    if constexpr (std::is_integral_v<T>) {
+                        this->_datos[i][j] = static_cast<T>(std::rand() %10);
+                    } else {
+                        this->_datos[i][j] = static_cast<T>(std::rand() %500) / 100.0f;
+                    }
                 }
             }
         }
@@ -106,15 +110,18 @@ class MatrizDinamica : public MatrizBase<T> {
 
             // Creación del objeto resultado para devolver un puntero.
             MatrizDinamica<T>* resultado = new MatrizDinamica<T>(this->_filas, this->_columnas);
-
-            // Suma
-            for (int i = 0; i < this->_filas; ++i){
-                for (int j = 0; j < this->_columnas; ++j){
-                    resultado->_datos[i][j] = this->_datos[i][j];
-                }
-            }
-
             return resultado;
+        }
+
+        void imprimir() const override {
+            std::cout << std::fixed << std::setprecision(1);
+            for (int i = 0; i < this->_filas; ++i) {
+                std::cout << "|";
+                for (int j = 0; j < this->_columnas; ++j) {
+                    std::cout << " " << this->_datos[i][j] << " |";
+                }
+                std::cout << std::endl;
+            }
         }
 
         // Método para obtener un elemento para la sobrecarga del operador +

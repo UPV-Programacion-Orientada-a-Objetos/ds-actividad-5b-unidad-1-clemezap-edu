@@ -42,7 +42,7 @@ class MatrizEstatica : public MatrizBase<T> {
 
         // Suma Polimórfica, devuelve una nueva MatrizEstatica con el resultado.
 
-        MatrizBase<T>* sumar(const Matriz<T>& otra) const override {
+        MatrizBase<T>* sumar(const MatrizBase<T>& otra) const override { 
             // Verificar dimensiones
             if(this->_filas != otra.getFilas() || this->_columnas != otra.getColumnas()) {
                 std::cerr << "Error: Las dimensiones de las matrices no son compatibles para la suma." << std::endl;
@@ -51,13 +51,6 @@ class MatrizEstatica : public MatrizBase<T> {
 
             // Creación del objeto resultado
             MatrizEstatica<T, M, N>* resultado = new MatrizEstatica<T, M, N>();
-
-            // Implementación de la suma
-            for (int i = 0; i < M; ++i){
-                for (int j = 0; j < N; ++j) {
-                    resultado->_datos[i][j] = this->_datos[i][j];
-                }
-            }
 
             return resultado;
         }
